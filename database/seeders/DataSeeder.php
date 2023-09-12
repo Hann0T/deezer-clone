@@ -27,6 +27,7 @@ class DataSeeder extends Seeder
 
         $artist = Artist::factory()->create(['name' => 'Julian Casablancas']);
         $tyranny = Album::factory()->create(['title' => 'Tyranny', 'artist_id' => $artist->id]);
+        $virtue = Album::factory()->create(['title' => 'Virtue', 'artist_id' => $artist->id]);
 
         Track::factory()->create(['title' => 'Take Me In Your Army', 'album_id' => $tyranny->id]);
         Track::factory()->create(['title' => 'Crunch Punch', 'album_id' => $tyranny->id]);
@@ -41,7 +42,6 @@ class DataSeeder extends Seeder
         Track::factory()->create(['title' => 'Nintendo Blood', 'album_id' => $tyranny->id]);
         Track::factory()->create(['title' => 'Off To War', 'album_id' => $tyranny->id]);
 
-        $virtue = Album::factory()->create(['title' => 'Virtue', 'artist_id' => $artist->id]);
         Track::factory()->create(['title' => 'Leave it in my Dreams', 'album_id' => $virtue->id]);
         Track::factory()->create(['title' => 'QYURRYUS', 'album_id' => $virtue->id]);
         Track::factory()->create(['title' => 'Pyramid of Bones', 'album_id' => $virtue->id]);

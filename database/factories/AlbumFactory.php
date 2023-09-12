@@ -17,7 +17,7 @@ class AlbumFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => $this->faker->title(),
+            'title' => $this->faker->name(),
             'upc' => $this->faker->numberBetween(),
             'cover' => $this->faker->imageUrl(),
             'artist_id' => \App\Models\Artist::factory()->create()->id,

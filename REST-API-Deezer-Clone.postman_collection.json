@@ -1,0 +1,1289 @@
+{
+	"info": {
+		"_postman_id": "57040906-31aa-447b-8611-14ce04f634ff",
+		"name": "REST API: Deezer Clone",
+		"description": "# Inicio rapido\n\nAntes de probar la API, necesitas crear o actualizar tus variables de entorno. Agrega las siguientes variables.\n\n| **variable** | **valor** |\n| --- | --- |\n| base_url | localhost |\n| user_email | [test@example.com](https://mailto:test@example.com) |\n| user_password | password |\n| authToken | sin valor |\n\n#### **el authToken se llenara cuando te registres o inicies sesión.**",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13558679"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Get user data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/user",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"user"
+							]
+						},
+						"description": "Con este GET endpoint podemos obtener la información de nuestro usuario autenticado."
+					},
+					"response": [
+						{
+							"name": "User data",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/user",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"user"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"id\": 1,\n    \"name\": \"test\",\n    \"email\": \"test@example.com\",\n    \"email_verified_at\": \"2023-09-12T02:05:49.000000Z\",\n    \"country_id\": 1,\n    \"created_at\": \"2023-09-12T02:05:49.000000Z\",\n    \"updated_at\": \"2023-09-12T02:05:49.000000Z\"\n}"
+						},
+						{
+							"name": "Unauthenticated",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/user",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"user"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"message\": \"Unauthenticated.\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    if(pm.response.code === 200) {",
+									"        pm.environment.set('authToken', pm.response.json().token)",
+									"    }",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "{{user_email}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{user_password}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"login"
+							]
+						},
+						"description": "En este POST endpoint podemos iniciar sesión con nuestro usuario y obtener nuestro token."
+					},
+					"response": [
+						{
+							"name": "Successful Login",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "email",
+											"value": "test@example.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "password",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "localhost/api/login",
+									"host": [
+										"localhost"
+									],
+									"path": [
+										"api",
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"token\": \"3|wvAJfaCXO0Xz2RLMQtoVMRZbgxtv59RVx3WMsM7yb0c4dc9c\"\n}"
+						},
+						{
+							"name": "Invalid Email",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "email",
+											"value": "asdf",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "{{user_password}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{base_url}}/api/login",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"login"
+									]
+								}
+							},
+							"status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+							"code": 422,
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"errors\": {\n        \"email\": [\n            \"The selected email is invalid.\"\n        ]\n    }\n}"
+						},
+						{
+							"name": "Invalid Password",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "email",
+											"value": "{{user_email}}",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "some",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{base_url}}/api/login",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"login"
+									]
+								}
+							},
+							"status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+							"code": 422,
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"errors\": {\n        \"password\": [\n            \"The password field must be at least 8 characters.\"\n        ]\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Logout",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    if(pm.response.code === 200) {",
+									"        pm.environment.set('authToken', \"\")",
+									"    }",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/logout",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"logout"
+							]
+						},
+						"description": "Con este POST request podemos cerrar nuestra sesión."
+					},
+					"response": [
+						{
+							"name": "Logout",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/logout",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"logout"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"message\": \"Successful logout\"\n}"
+						},
+						{
+							"name": "Unsuccessful Logout",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/logout",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"logout"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"message\": \"Unauthenticated.\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    if(pm.response.code === 202) {",
+									"        pm.environment.set('authToken', pm.response.json().token)",
+									"    }",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 202]);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "user",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "use3r@example.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "password",
+									"type": "text"
+								},
+								{
+									"key": "confirm",
+									"value": "password",
+									"type": "text"
+								},
+								{
+									"key": "country",
+									"value": "Perú",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"register"
+							]
+						},
+						"description": "En este POST request podemos crear un nuevo usuario y obtener nuestro token."
+					},
+					"response": [
+						{
+							"name": "Successful Register",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "user",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "user@example.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "password",
+											"type": "text"
+										},
+										{
+											"key": "confirm",
+											"value": "password",
+											"type": "text"
+										},
+										{
+											"key": "country",
+											"value": "Perú",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{base_url}}/api/register",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"register"
+									]
+								}
+							},
+							"status": "Accepted",
+							"code": 202,
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"user\": {\n        \"name\": \"user\",\n        \"email\": \"user@example.com\",\n        \"country_id\": 1,\n        \"updated_at\": \"2023-09-12T02:36:24.000000Z\",\n        \"created_at\": \"2023-09-12T02:36:24.000000Z\",\n        \"id\": 2\n    },\n    \"token\": \"9|T8SubvMjOxyQcj7IzFHCMtW5ehKHza76qW8zlOOMdaca4a62\"\n}"
+						},
+						{
+							"name": "Invalid request",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "user",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "something@example.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "password",
+											"type": "text"
+										},
+										{
+											"key": "confirm",
+											"value": "anotherpassword",
+											"type": "text"
+										},
+										{
+											"key": "country",
+											"value": "Perú",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{base_url}}/api/register",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"register"
+									]
+								}
+							},
+							"status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+							"code": 422,
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"errors\": {\n        \"password\": [\n            \"The password field must match confirm.\"\n        ],\n        \"confirm\": [\n            \"The confirm field must match password.\"\n        ]\n    }\n}"
+						},
+						{
+							"name": "Invalid email",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "user",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "test@example.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "password",
+											"type": "text"
+										},
+										{
+											"key": "confirm",
+											"value": "password",
+											"type": "text"
+										},
+										{
+											"key": "country",
+											"value": "Perú",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{base_url}}/api/register",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"register"
+									]
+								}
+							},
+							"status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+							"code": 422,
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"errors\": {\n        \"email\": [\n            \"The email has already been taken.\"\n        ]\n    }\n}"
+						},
+						{
+							"name": "Invalid Country",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "user",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "something@example.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "password",
+											"type": "text"
+										},
+										{
+											"key": "confirm",
+											"value": "password",
+											"type": "text"
+										},
+										{
+											"key": "country",
+											"value": "Asdf",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{base_url}}/api/register",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"register"
+									]
+								}
+							},
+							"status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+							"code": 422,
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"errors\": {\n        \"country\": [\n            \"The selected country is invalid.\"\n        ]\n    }\n}"
+						}
+					]
+				}
+			],
+			"description": "Aca estan los endpoints para poder autenticarte en la aplicación."
+		},
+		{
+			"name": "Search endpoint",
+			"item": [
+				{
+					"name": "Search Songs by artist name",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/search?q=julian",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "julian"
+								}
+							]
+						},
+						"description": "En este GET endpoint podemos buscar canciones por el nombre del artista, album o canción."
+					},
+					"response": [
+						{
+							"name": "Successful",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/search?q=julian",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"search"
+									],
+									"query": [
+										{
+											"key": "q",
+											"value": "julian"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"current_page\": 1,\n    \"data\": [\n        {\n            \"id\": 1,\n            \"title\": \"Take Me In Your Army\",\n            \"title_short\": \"Miss\",\n            \"duration\": 2,\n            \"rank\": 597081175,\n            \"track_position\": 29,\n            \"album\": {\n                \"id\": 1,\n                \"title\": \"Tyranny\",\n                \"upc\": \"1380151802\",\n                \"cover\": \"https://via.placeholder.com/640x480.png/0033ee?text=qui\",\n                \"artist\": {\n                    \"id\": 1,\n                    \"name\": \"Julian Casablancas\",\n                    \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                    \"fans\": 1417247041\n                }\n            }\n        },\n        {\n            \"id\": 2,\n            \"title\": \"Crunch Punch\",\n            \"title_short\": \"Ms.\",\n            \"duration\": 0,\n            \"rank\": 195040827,\n            \"track_position\": 24,\n            \"album\": {\n                \"id\": 1,\n                \"title\": \"Tyranny\",\n                \"upc\": \"1380151802\",\n                \"cover\": \"https://via.placeholder.com/640x480.png/0033ee?text=qui\",\n                \"artist\": {\n                    \"id\": 1,\n                    \"name\": \"Julian Casablancas\",\n                    \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                    \"fans\": 1417247041\n                }\n            }\n        },\n        {\n            \"id\": 3,\n            \"title\": \"M.utually A.ssured D.estruction\",\n            \"title_short\": \"Prof.\",\n            \"duration\": 1,\n            \"rank\": 1818146574,\n            \"track_position\": 31,\n            \"album\": {\n                \"id\": 1,\n                \"title\": \"Tyranny\",\n                \"upc\": \"1380151802\",\n                \"cover\": \"https://via.placeholder.com/640x480.png/0033ee?text=qui\",\n                \"artist\": {\n                    \"id\": 1,\n                    \"name\": \"Julian Casablancas\",\n                    \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                    \"fans\": 1417247041\n                }\n            }\n        },\n        {\n            \"id\": 4,\n            \"title\": \"Human sadness\",\n            \"title_short\": \"Mr.\",\n            \"duration\": 9,\n            \"rank\": 215476846,\n            \"track_position\": 19,\n            \"album\": {\n                \"id\": 1,\n                \"title\": \"Tyranny\",\n                \"upc\": \"1380151802\",\n                \"cover\": \"https://via.placeholder.com/640x480.png/0033ee?text=qui\",\n                \"artist\": {\n                    \"id\": 1,\n                    \"name\": \"Julian Casablancas\",\n                    \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                    \"fans\": 1417247041\n                }\n            }\n        },\n        {\n            \"id\": 5,\n            \"title\": \"Where No Eagles Fly\",\n            \"title_short\": \"Mr.\",\n            \"duration\": 6,\n            \"rank\": 2130543869,\n            \"track_position\": 14,\n            \"album\": {\n                \"id\": 1,\n                \"title\": \"Tyranny\",\n                \"upc\": \"1380151802\",\n                \"cover\": \"https://via.placeholder.com/640x480.png/0033ee?text=qui\",\n                \"artist\": {\n                    \"id\": 1,\n                    \"name\": \"Julian Casablancas\",\n                    \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                    \"fans\": 1417247041\n                }\n            }\n        },\n        {\n            \"id\": 6,\n            \"title\": \"Father Electricity\",\n            \"title_short\": \"Prof.\",\n            \"duration\": 2,\n            \"rank\": 198582332,\n            \"track_position\": 17,\n            \"album\": {\n                \"id\": 1,\n                \"title\": \"Tyranny\",\n                \"upc\": \"1380151802\",\n                \"cover\": \"https://via.placeholder.com/640x480.png/0033ee?text=qui\",\n                \"artist\": {\n                    \"id\": 1,\n                    \"name\": \"Julian Casablancas\",\n                    \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                    \"fans\": 1417247041\n                }\n            }\n        },\n        {\n            \"id\": 7,\n            \"title\": \"Johan Von Bronx\",\n            \"title_short\": \"Prof.\",\n            \"duration\": 10,\n            \"rank\": 1019760189,\n            \"track_position\": 20,\n            \"album\": {\n                \"id\": 1,\n                \"title\": \"Tyranny\",\n                \"upc\": \"1380151802\",\n                \"cover\": \"https://via.placeholder.com/640x480.png/0033ee?text=qui\",\n                \"artist\": {\n                    \"id\": 1,\n                    \"name\": \"Julian Casablancas\",\n                    \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                    \"fans\": 1417247041\n                }\n            }\n        },\n        {\n            \"id\": 8,\n            \"title\": \"Business Dog\",\n            \"title_short\": \"Prof.\",\n            \"duration\": 1,\n            \"rank\": 2034296600,\n            \"track_position\": 6,\n            \"album\": {\n                \"id\": 1,\n                \"title\": \"Tyranny\",\n                \"upc\": \"1380151802\",\n                \"cover\": \"https://via.placeholder.com/640x480.png/0033ee?text=qui\",\n                \"artist\": {\n                    \"id\": 1,\n                    \"name\": \"Julian Casablancas\",\n                    \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                    \"fans\": 1417247041\n                }\n            }\n        },\n        {\n            \"id\": 9,\n            \"title\": \"Xerox\",\n            \"title_short\": \"Ms.\",\n            \"duration\": 0,\n            \"rank\": 818019243,\n            \"track_position\": 48,\n            \"album\": {\n                \"id\": 1,\n                \"title\": \"Tyranny\",\n                \"upc\": \"1380151802\",\n                \"cover\": \"https://via.placeholder.com/640x480.png/0033ee?text=qui\",\n                \"artist\": {\n                    \"id\": 1,\n                    \"name\": \"Julian Casablancas\",\n                    \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                    \"fans\": 1417247041\n                }\n            }\n        },\n        {\n            \"id\": 10,\n            \"title\": \"Dare I Care\",\n            \"title_short\": \"Ms.\",\n            \"duration\": 7,\n            \"rank\": 1943857958,\n            \"track_position\": 24,\n            \"album\": {\n                \"id\": 1,\n                \"title\": \"Tyranny\",\n                \"upc\": \"1380151802\",\n                \"cover\": \"https://via.placeholder.com/640x480.png/0033ee?text=qui\",\n                \"artist\": {\n                    \"id\": 1,\n                    \"name\": \"Julian Casablancas\",\n                    \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                    \"fans\": 1417247041\n                }\n            }\n        },\n        {\n            \"id\": 11,\n            \"title\": \"Nintendo Blood\",\n            \"title_short\": \"Mr.\",\n            \"duration\": 7,\n            \"rank\": 143806157,\n            \"track_position\": 6,\n            \"album\": {\n                \"id\": 1,\n                \"title\": \"Tyranny\",\n                \"upc\": \"1380151802\",\n                \"cover\": \"https://via.placeholder.com/640x480.png/0033ee?text=qui\",\n                \"artist\": {\n                    \"id\": 1,\n                    \"name\": \"Julian Casablancas\",\n                    \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                    \"fans\": 1417247041\n                }\n            }\n        },\n        {\n            \"id\": 12,\n            \"title\": \"Off To War\",\n            \"title_short\": \"Miss\",\n            \"duration\": 9,\n            \"rank\": 1747494300,\n            \"track_position\": 42,\n            \"album\": {\n                \"id\": 1,\n                \"title\": \"Tyranny\",\n                \"upc\": \"1380151802\",\n                \"cover\": \"https://via.placeholder.com/640x480.png/0033ee?text=qui\",\n                \"artist\": {\n                    \"id\": 1,\n                    \"name\": \"Julian Casablancas\",\n                    \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                    \"fans\": 1417247041\n                }\n            }\n        },\n        {\n            \"id\": 13,\n            \"title\": \"Leave it in my Dreams\",\n            \"title_short\": \"Dr.\",\n            \"duration\": 2,\n            \"rank\": 1930345093,\n            \"track_position\": 23,\n            \"album\": {\n                \"id\": 2,\n                \"title\": \"Virtue\",\n                \"upc\": \"111816280\",\n                \"cover\": \"https://via.placeholder.com/640x480.png/006611?text=rerum\",\n                \"artist\": {\n                    \"id\": 1,\n                    \"name\": \"Julian Casablancas\",\n                    \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                    \"fans\": 1417247041\n                }\n            }\n        },\n        {\n            \"id\": 14,\n            \"title\": \"QYURRYUS\",\n            \"title_short\": \"Dr.\",\n            \"duration\": 6,\n            \"rank\": 2055352111,\n            \"track_position\": 34,\n            \"album\": {\n                \"id\": 2,\n                \"title\": \"Virtue\",\n                \"upc\": \"111816280\",\n                \"cover\": \"https://via.placeholder.com/640x480.png/006611?text=rerum\",\n                \"artist\": {\n                    \"id\": 1,\n                    \"name\": \"Julian Casablancas\",\n                    \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                    \"fans\": 1417247041\n                }\n            }\n        },\n        {\n            \"id\": 15,\n            \"title\": \"Pyramid of Bones\",\n            \"title_short\": \"Prof.\",\n            \"duration\": 7,\n            \"rank\": 2027112883,\n            \"track_position\": 28,\n            \"album\": {\n                \"id\": 2,\n                \"title\": \"Virtue\",\n                \"upc\": \"111816280\",\n                \"cover\": \"https://via.placeholder.com/640x480.png/006611?text=rerum\",\n                \"artist\": {\n                    \"id\": 1,\n                    \"name\": \"Julian Casablancas\",\n                    \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                    \"fans\": 1417247041\n                }\n            }\n        },\n        {\n            \"id\": 16,\n            \"title\": \"Permanent High School\",\n            \"title_short\": \"Dr.\",\n            \"duration\": 6,\n            \"rank\": 582326853,\n            \"track_position\": 45,\n            \"album\": {\n                \"id\": 2,\n                \"title\": \"Virtue\",\n                \"upc\": \"111816280\",\n                \"cover\": \"https://via.placeholder.com/640x480.png/006611?text=rerum\",\n                \"artist\": {\n                    \"id\": 1,\n                    \"name\": \"Julian Casablancas\",\n                    \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                    \"fans\": 1417247041\n                }\n            }\n        },\n        {\n            \"id\": 17,\n            \"title\": \"ALieNNatioN\",\n            \"title_short\": \"Mr.\",\n            \"duration\": 4,\n            \"rank\": 254795082,\n            \"track_position\": 17,\n            \"album\": {\n                \"id\": 2,\n                \"title\": \"Virtue\",\n                \"upc\": \"111816280\",\n                \"cover\": \"https://via.placeholder.com/640x480.png/006611?text=rerum\",\n                \"artist\": {\n                    \"id\": 1,\n                    \"name\": \"Julian Casablancas\",\n                    \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                    \"fans\": 1417247041\n                }\n            }\n        },\n        {\n            \"id\": 18,\n            \"title\": \"One of the Ones\",\n            \"title_short\": \"Mr.\",\n            \"duration\": 8,\n            \"rank\": 1624791495,\n            \"track_position\": 5,\n            \"album\": {\n                \"id\": 2,\n                \"title\": \"Virtue\",\n                \"upc\": \"111816280\",\n                \"cover\": \"https://via.placeholder.com/640x480.png/006611?text=rerum\",\n                \"artist\": {\n                    \"id\": 1,\n                    \"name\": \"Julian Casablancas\",\n                    \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                    \"fans\": 1417247041\n                }\n            }\n        },\n        {\n            \"id\": 19,\n            \"title\": \"All Wordz Are Made Up\",\n            \"title_short\": \"Prof.\",\n            \"duration\": 3,\n            \"rank\": 1168516829,\n            \"track_position\": 41,\n            \"album\": {\n                \"id\": 2,\n                \"title\": \"Virtue\",\n                \"upc\": \"111816280\",\n                \"cover\": \"https://via.placeholder.com/640x480.png/006611?text=rerum\",\n                \"artist\": {\n                    \"id\": 1,\n                    \"name\": \"Julian Casablancas\",\n                    \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                    \"fans\": 1417247041\n                }\n            }\n        },\n        {\n            \"id\": 20,\n            \"title\": \"Think Before You Drink\",\n            \"title_short\": \"Ms.\",\n            \"duration\": 2,\n            \"rank\": 546330269,\n            \"track_position\": 26,\n            \"album\": {\n                \"id\": 2,\n                \"title\": \"Virtue\",\n                \"upc\": \"111816280\",\n                \"cover\": \"https://via.placeholder.com/640x480.png/006611?text=rerum\",\n                \"artist\": {\n                    \"id\": 1,\n                    \"name\": \"Julian Casablancas\",\n                    \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                    \"fans\": 1417247041\n                }\n            }\n        }\n    ],\n    \"first_page_url\": \"http://localhost/api/search?q=julian&page=1\",\n    \"from\": 1,\n    \"last_page\": 2,\n    \"last_page_url\": \"http://localhost/api/search?q=julian&page=2\",\n    \"links\": [\n        {\n            \"url\": null,\n            \"label\": \"&laquo; Previous\",\n            \"active\": false\n        },\n        {\n            \"url\": \"http://localhost/api/search?q=julian&page=1\",\n            \"label\": \"1\",\n            \"active\": true\n        },\n        {\n            \"url\": \"http://localhost/api/search?q=julian&page=2\",\n            \"label\": \"2\",\n            \"active\": false\n        },\n        {\n            \"url\": \"http://localhost/api/search?q=julian&page=2\",\n            \"label\": \"Next &raquo;\",\n            \"active\": false\n        }\n    ],\n    \"next_page_url\": \"http://localhost/api/search?q=julian&page=2\",\n    \"path\": \"http://localhost/api/search\",\n    \"per_page\": 20,\n    \"prev_page_url\": null,\n    \"to\": 20,\n    \"total\": 27\n}"
+						},
+						{
+							"name": "No song found",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/search?q=something",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"search"
+									],
+									"query": [
+										{
+											"key": "q",
+											"value": "something"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"current_page\": 1,\n    \"data\": [],\n    \"first_page_url\": \"http://localhost/api/search?q=something&page=1\",\n    \"from\": null,\n    \"last_page\": 1,\n    \"last_page_url\": \"http://localhost/api/search?q=something&page=1\",\n    \"links\": [\n        {\n            \"url\": null,\n            \"label\": \"&laquo; Previous\",\n            \"active\": false\n        },\n        {\n            \"url\": \"http://localhost/api/search?q=something&page=1\",\n            \"label\": \"1\",\n            \"active\": true\n        },\n        {\n            \"url\": null,\n            \"label\": \"Next &raquo;\",\n            \"active\": false\n        }\n    ],\n    \"next_page_url\": null,\n    \"path\": \"http://localhost/api/search\",\n    \"per_page\": 20,\n    \"prev_page_url\": null,\n    \"to\": null,\n    \"total\": 0\n}"
+						}
+					]
+				},
+				{
+					"name": "Search Songs by song title",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/search?q=human",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "human"
+								}
+							]
+						},
+						"description": "En este GET endpoint podemos buscar canciones por el nombre del artista, album o canción."
+					},
+					"response": []
+				},
+				{
+					"name": "Search Songs by album title",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/search?q=virtue",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "virtue"
+								}
+							]
+						},
+						"description": "En este GET endpoint podemos buscar canciones por el nombre del artista, album o canción."
+					},
+					"response": []
+				},
+				{
+					"name": "Search Songs by artist name page 2",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/search?q=julian&page=2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "julian"
+								},
+								{
+									"key": "page",
+									"value": "2"
+								}
+							]
+						},
+						"description": "En este GET endpoint podemos buscar canciones por el nombre del artista, album o canción."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Albums",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/album/1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"album",
+						"1"
+					]
+				},
+				"description": "En este GET endpoint podemos obtener un album por el titulo."
+			},
+			"response": [
+				{
+					"name": "Successful",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/album/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"album",
+								"1"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\n    \"id\": 1,\n    \"title\": \"Tyranny\",\n    \"upc\": \"1380151802\",\n    \"link\": \"http://localhost/album/1\",\n    \"cover\": \"https://via.placeholder.com/640x480.png/0033ee?text=qui\",\n    \"nb_tracks\": 12,\n    \"duration\": 54,\n    \"artist\": {\n        \"id\": 1,\n        \"name\": \"Julian Casablancas\",\n        \"link\": \"http://localhost/artist/1\",\n        \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n        \"nb_album\": 2,\n        \"nb_fan\": 1417247041,\n        \"type\": \"artist\"\n    },\n    \"tracks\": [\n        {\n            \"id\": 1,\n            \"title\": \"Take Me In Your Army\",\n            \"title_short\": \"Miss\",\n            \"duration\": 2,\n            \"rank\": 597081175,\n            \"track_position\": 29,\n            \"link\": \"http://localhost/track/1\",\n            \"artist\": {\n                \"id\": 1,\n                \"name\": \"Julian Casablancas\",\n                \"link\": \"http://localhost/artist/1\",\n                \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                \"nb_album\": 2,\n                \"nb_fan\": 1417247041,\n                \"type\": \"artist\"\n            },\n            \"album\": {\n                \"id\": 1,\n                \"title\": \"Tyranny\",\n                \"upc\": \"1380151802\",\n                \"cover\": \"https://via.placeholder.com/640x480.png/0033ee?text=qui\",\n                \"artist\": {\n                    \"id\": 1,\n                    \"name\": \"Julian Casablancas\",\n                    \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                    \"fans\": 1417247041\n                }\n            },\n            \"type\": \"track\"\n        },\n        {\n            \"id\": 2,\n            \"title\": \"Crunch Punch\",\n            \"title_short\": \"Ms.\",\n            \"duration\": 0,\n            \"rank\": 195040827,\n            \"track_position\": 24,\n            \"link\": \"http://localhost/track/2\",\n            \"artist\": {\n                \"id\": 1,\n                \"name\": \"Julian Casablancas\",\n                \"link\": \"http://localhost/artist/1\",\n                \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                \"nb_album\": 2,\n                \"nb_fan\": 1417247041,\n                \"type\": \"artist\"\n            },\n            \"album\": {\n                \"id\": 1,\n                \"title\": \"Tyranny\",\n                \"upc\": \"1380151802\",\n                \"cover\": \"https://via.placeholder.com/640x480.png/0033ee?text=qui\",\n                \"artist\": {\n                    \"id\": 1,\n                    \"name\": \"Julian Casablancas\",\n                    \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                    \"fans\": 1417247041\n                }\n            },\n            \"type\": \"track\"\n        },\n        {\n            \"id\": 3,\n            \"title\": \"M.utually A.ssured D.estruction\",\n            \"title_short\": \"Prof.\",\n            \"duration\": 1,\n            \"rank\": 1818146574,\n            \"track_position\": 31,\n            \"link\": \"http://localhost/track/3\",\n            \"artist\": {\n                \"id\": 1,\n                \"name\": \"Julian Casablancas\",\n                \"link\": \"http://localhost/artist/1\",\n                \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                \"nb_album\": 2,\n                \"nb_fan\": 1417247041,\n                \"type\": \"artist\"\n            },\n            \"album\": {\n                \"id\": 1,\n                \"title\": \"Tyranny\",\n                \"upc\": \"1380151802\",\n                \"cover\": \"https://via.placeholder.com/640x480.png/0033ee?text=qui\",\n                \"artist\": {\n                    \"id\": 1,\n                    \"name\": \"Julian Casablancas\",\n                    \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                    \"fans\": 1417247041\n                }\n            },\n            \"type\": \"track\"\n        },\n        {\n            \"id\": 4,\n            \"title\": \"Human sadness\",\n            \"title_short\": \"Mr.\",\n            \"duration\": 9,\n            \"rank\": 215476846,\n            \"track_position\": 19,\n            \"link\": \"http://localhost/track/4\",\n            \"artist\": {\n                \"id\": 1,\n                \"name\": \"Julian Casablancas\",\n                \"link\": \"http://localhost/artist/1\",\n                \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                \"nb_album\": 2,\n                \"nb_fan\": 1417247041,\n                \"type\": \"artist\"\n            },\n            \"album\": {\n                \"id\": 1,\n                \"title\": \"Tyranny\",\n                \"upc\": \"1380151802\",\n                \"cover\": \"https://via.placeholder.com/640x480.png/0033ee?text=qui\",\n                \"artist\": {\n                    \"id\": 1,\n                    \"name\": \"Julian Casablancas\",\n                    \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                    \"fans\": 1417247041\n                }\n            },\n            \"type\": \"track\"\n        },\n        {\n            \"id\": 5,\n            \"title\": \"Where No Eagles Fly\",\n            \"title_short\": \"Mr.\",\n            \"duration\": 6,\n            \"rank\": 2130543869,\n            \"track_position\": 14,\n            \"link\": \"http://localhost/track/5\",\n            \"artist\": {\n                \"id\": 1,\n                \"name\": \"Julian Casablancas\",\n                \"link\": \"http://localhost/artist/1\",\n                \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                \"nb_album\": 2,\n                \"nb_fan\": 1417247041,\n                \"type\": \"artist\"\n            },\n            \"album\": {\n                \"id\": 1,\n                \"title\": \"Tyranny\",\n                \"upc\": \"1380151802\",\n                \"cover\": \"https://via.placeholder.com/640x480.png/0033ee?text=qui\",\n                \"artist\": {\n                    \"id\": 1,\n                    \"name\": \"Julian Casablancas\",\n                    \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                    \"fans\": 1417247041\n                }\n            },\n            \"type\": \"track\"\n        },\n        {\n            \"id\": 6,\n            \"title\": \"Father Electricity\",\n            \"title_short\": \"Prof.\",\n            \"duration\": 2,\n            \"rank\": 198582332,\n            \"track_position\": 17,\n            \"link\": \"http://localhost/track/6\",\n            \"artist\": {\n                \"id\": 1,\n                \"name\": \"Julian Casablancas\",\n                \"link\": \"http://localhost/artist/1\",\n                \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                \"nb_album\": 2,\n                \"nb_fan\": 1417247041,\n                \"type\": \"artist\"\n            },\n            \"album\": {\n                \"id\": 1,\n                \"title\": \"Tyranny\",\n                \"upc\": \"1380151802\",\n                \"cover\": \"https://via.placeholder.com/640x480.png/0033ee?text=qui\",\n                \"artist\": {\n                    \"id\": 1,\n                    \"name\": \"Julian Casablancas\",\n                    \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                    \"fans\": 1417247041\n                }\n            },\n            \"type\": \"track\"\n        },\n        {\n            \"id\": 7,\n            \"title\": \"Johan Von Bronx\",\n            \"title_short\": \"Prof.\",\n            \"duration\": 10,\n            \"rank\": 1019760189,\n            \"track_position\": 20,\n            \"link\": \"http://localhost/track/7\",\n            \"artist\": {\n                \"id\": 1,\n                \"name\": \"Julian Casablancas\",\n                \"link\": \"http://localhost/artist/1\",\n                \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                \"nb_album\": 2,\n                \"nb_fan\": 1417247041,\n                \"type\": \"artist\"\n            },\n            \"album\": {\n                \"id\": 1,\n                \"title\": \"Tyranny\",\n                \"upc\": \"1380151802\",\n                \"cover\": \"https://via.placeholder.com/640x480.png/0033ee?text=qui\",\n                \"artist\": {\n                    \"id\": 1,\n                    \"name\": \"Julian Casablancas\",\n                    \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                    \"fans\": 1417247041\n                }\n            },\n            \"type\": \"track\"\n        },\n        {\n            \"id\": 8,\n            \"title\": \"Business Dog\",\n            \"title_short\": \"Prof.\",\n            \"duration\": 1,\n            \"rank\": 2034296600,\n            \"track_position\": 6,\n            \"link\": \"http://localhost/track/8\",\n            \"artist\": {\n                \"id\": 1,\n                \"name\": \"Julian Casablancas\",\n                \"link\": \"http://localhost/artist/1\",\n                \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                \"nb_album\": 2,\n                \"nb_fan\": 1417247041,\n                \"type\": \"artist\"\n            },\n            \"album\": {\n                \"id\": 1,\n                \"title\": \"Tyranny\",\n                \"upc\": \"1380151802\",\n                \"cover\": \"https://via.placeholder.com/640x480.png/0033ee?text=qui\",\n                \"artist\": {\n                    \"id\": 1,\n                    \"name\": \"Julian Casablancas\",\n                    \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                    \"fans\": 1417247041\n                }\n            },\n            \"type\": \"track\"\n        },\n        {\n            \"id\": 9,\n            \"title\": \"Xerox\",\n            \"title_short\": \"Ms.\",\n            \"duration\": 0,\n            \"rank\": 818019243,\n            \"track_position\": 48,\n            \"link\": \"http://localhost/track/9\",\n            \"artist\": {\n                \"id\": 1,\n                \"name\": \"Julian Casablancas\",\n                \"link\": \"http://localhost/artist/1\",\n                \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                \"nb_album\": 2,\n                \"nb_fan\": 1417247041,\n                \"type\": \"artist\"\n            },\n            \"album\": {\n                \"id\": 1,\n                \"title\": \"Tyranny\",\n                \"upc\": \"1380151802\",\n                \"cover\": \"https://via.placeholder.com/640x480.png/0033ee?text=qui\",\n                \"artist\": {\n                    \"id\": 1,\n                    \"name\": \"Julian Casablancas\",\n                    \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                    \"fans\": 1417247041\n                }\n            },\n            \"type\": \"track\"\n        },\n        {\n            \"id\": 10,\n            \"title\": \"Dare I Care\",\n            \"title_short\": \"Ms.\",\n            \"duration\": 7,\n            \"rank\": 1943857958,\n            \"track_position\": 24,\n            \"link\": \"http://localhost/track/10\",\n            \"artist\": {\n                \"id\": 1,\n                \"name\": \"Julian Casablancas\",\n                \"link\": \"http://localhost/artist/1\",\n                \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                \"nb_album\": 2,\n                \"nb_fan\": 1417247041,\n                \"type\": \"artist\"\n            },\n            \"album\": {\n                \"id\": 1,\n                \"title\": \"Tyranny\",\n                \"upc\": \"1380151802\",\n                \"cover\": \"https://via.placeholder.com/640x480.png/0033ee?text=qui\",\n                \"artist\": {\n                    \"id\": 1,\n                    \"name\": \"Julian Casablancas\",\n                    \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                    \"fans\": 1417247041\n                }\n            },\n            \"type\": \"track\"\n        },\n        {\n            \"id\": 11,\n            \"title\": \"Nintendo Blood\",\n            \"title_short\": \"Mr.\",\n            \"duration\": 7,\n            \"rank\": 143806157,\n            \"track_position\": 6,\n            \"link\": \"http://localhost/track/11\",\n            \"artist\": {\n                \"id\": 1,\n                \"name\": \"Julian Casablancas\",\n                \"link\": \"http://localhost/artist/1\",\n                \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                \"nb_album\": 2,\n                \"nb_fan\": 1417247041,\n                \"type\": \"artist\"\n            },\n            \"album\": {\n                \"id\": 1,\n                \"title\": \"Tyranny\",\n                \"upc\": \"1380151802\",\n                \"cover\": \"https://via.placeholder.com/640x480.png/0033ee?text=qui\",\n                \"artist\": {\n                    \"id\": 1,\n                    \"name\": \"Julian Casablancas\",\n                    \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                    \"fans\": 1417247041\n                }\n            },\n            \"type\": \"track\"\n        },\n        {\n            \"id\": 12,\n            \"title\": \"Off To War\",\n            \"title_short\": \"Miss\",\n            \"duration\": 9,\n            \"rank\": 1747494300,\n            \"track_position\": 42,\n            \"link\": \"http://localhost/track/12\",\n            \"artist\": {\n                \"id\": 1,\n                \"name\": \"Julian Casablancas\",\n                \"link\": \"http://localhost/artist/1\",\n                \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                \"nb_album\": 2,\n                \"nb_fan\": 1417247041,\n                \"type\": \"artist\"\n            },\n            \"album\": {\n                \"id\": 1,\n                \"title\": \"Tyranny\",\n                \"upc\": \"1380151802\",\n                \"cover\": \"https://via.placeholder.com/640x480.png/0033ee?text=qui\",\n                \"artist\": {\n                    \"id\": 1,\n                    \"name\": \"Julian Casablancas\",\n                    \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n                    \"fans\": 1417247041\n                }\n            },\n            \"type\": \"track\"\n        }\n    ],\n    \"genres\": [],\n    \"type\": \"album\"\n}"
+				},
+				{
+					"name": "Unsuccessful",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/album/99999",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"album",
+								"99999"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "[]"
+				}
+			]
+		},
+		{
+			"name": "Artist",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/artist/1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"artist",
+						"1"
+					]
+				},
+				"description": "En este GET endpoint podemos obtener un artista por su nombre."
+			},
+			"response": [
+				{
+					"name": "Successful",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/artist/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"artist",
+								"1"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\n    \"id\": 1,\n    \"name\": \"Julian Casablancas\",\n    \"link\": \"http://localhost/artist/1\",\n    \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n    \"nb_album\": 2,\n    \"nb_fan\": 1417247041,\n    \"type\": \"artist\"\n}"
+				},
+				{
+					"name": "Unsuccessful Copy",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/artist/9999999999999999999999",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"artist",
+								"9999999999999999999999"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "[]"
+				}
+			]
+		},
+		{
+			"name": "Tracks",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/track/4",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"track",
+						"4"
+					]
+				},
+				"description": "En este GET endpoint podemos obtener una canción por su nombre."
+			},
+			"response": [
+				{
+					"name": "Successful",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/track/4",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"track",
+								"4"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\n    \"id\": 4,\n    \"title\": \"Human sadness\",\n    \"title_short\": \"Mr.\",\n    \"duration\": 9,\n    \"rank\": 215476846,\n    \"track_position\": 19,\n    \"link\": \"http://localhost/track/4\",\n    \"artist\": {\n        \"id\": 1,\n        \"name\": \"Julian Casablancas\",\n        \"link\": \"http://localhost/artist/1\",\n        \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n        \"nb_album\": 2,\n        \"nb_fan\": 1417247041,\n        \"type\": \"artist\"\n    },\n    \"album\": {\n        \"id\": 1,\n        \"title\": \"Tyranny\",\n        \"upc\": \"1380151802\",\n        \"cover\": \"https://via.placeholder.com/640x480.png/0033ee?text=qui\",\n        \"artist\": {\n            \"id\": 1,\n            \"name\": \"Julian Casablancas\",\n            \"picture\": \"https://via.placeholder.com/640x480.png/000066?text=quia\",\n            \"fans\": 1417247041\n        }\n    },\n    \"type\": \"track\"\n}"
+				},
+				{
+					"name": "Unsuccessful",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/track/9999",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"track",
+								"9999"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "[]"
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{authToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "localhost"
+		},
+		{
+			"key": "user_email",
+			"value": "test@example.com",
+			"type": "string"
+		},
+		{
+			"key": "user_password",
+			"value": "password",
+			"type": "string"
+		},
+		{
+			"key": "authToken",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

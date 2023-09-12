@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Album;
 use App\Models\Artist;
+use App\Models\Country;
 use App\Models\Track;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -16,10 +17,12 @@ class DataSeeder extends Seeder
      */
     public function run(): void
     {
+        $country = Country::factory()->create(['name' => 'Perú']);
         User::factory()->create([
             'name' => 'test',
             'email' => 'test@example.com',
             'password' => 'password',
+            'country_id' => $country->id,
         ]);
 
         $artist = Artist::factory()->create(['name' => 'Julian Casablancas']);

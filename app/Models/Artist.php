@@ -32,7 +32,6 @@ class Artist extends Model implements JsonSerializable
             'nb_album' => $this->albums()->count(),
             'nb_fan' => $this->fans,
             'type' => 'artist',
-            'tracklist' => 'wip'
         ];
     }
 }

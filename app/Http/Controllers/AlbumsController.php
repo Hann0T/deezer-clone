@@ -9,8 +9,12 @@ class AlbumsController extends Controller
 {
     public function get(Request $request, string $id)
     {
-        $album =  Album::with(['artist', 'tracks', 'genres'])
-            ->findOrFail($id);
-        return response()->json($album);
+        try {
+            $album =  Album::with(['artist', 'tracks', 'genres'])
+                ->findOrFail($id);
+            return response()->json($album);
+        } catch (\Exception $e) {
+            return response()->json([])->setStatusCode(404);
+        }
     }
 }

@@ -10,9 +10,13 @@ class TracksController extends Controller
 {
     public function get(Request $request, string $id)
     {
-        $track =  Track::with(['album', 'album.artist'])
-            ->findOrFail($id);
-        return response()->json($track);
+        try {
+            $track =  Track::with(['album', 'album.artist'])
+                ->findOrFail($id);
+            return response()->json($track);
+        } catch (\Exception $e) {
+            return response()->json([])->setStatusCode(404);
+        }
     }
 
     public function search(Request $request)
@@ -27,7 +31,6 @@ class TracksController extends Controller
                 $query->where('name', 'like', "%$searchQuery%");
             })
             ->paginate(20)
-            ->withQueryString()
-            ->toJson();
+            ->withQueryString();
     }
 }

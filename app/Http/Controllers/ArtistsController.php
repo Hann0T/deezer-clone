@@ -9,7 +9,11 @@ class ArtistsController extends Controller
 {
     public function get(Request $request, string $id)
     {
-        $artist = Artist::findOrFail($id);
-        return response()->json($artist);
+        try {
+            $artist = Artist::findOrFail($id);
+            return response()->json($artist);
+        } catch (\Exception $e) {
+            return response()->json([])->setStatusCode(404);
+        }
     }
 }

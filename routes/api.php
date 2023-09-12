@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AlbumsController;
 use App\Http\Controllers\ArtistsController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
@@ -22,6 +23,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
 
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/album/{id}', [AlbumsController::class, 'get']);
     Route::get('/artist/{id}', [ArtistsController::class, 'get']);
 });
 
